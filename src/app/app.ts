@@ -57,4 +57,10 @@ export class App {
     this.tasks.set([...current, { title: 'New task', description: '', dueDate: '', priority: 'Normal', status: 'Pending' }]);
   }
 
+  onTaskChange(index: number, updated: Record<string, string>) {
+    const list = [...this.tasks()];
+    list[index] = updated;
+    this.tasks.set(list);
+  }
+
 }

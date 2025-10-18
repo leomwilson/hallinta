@@ -10,8 +10,8 @@
 			<p>No tasks yet.</p>
 		</div>
 
-		<div class="task-list">
-			<app-task *ngFor="let t of tasks()" [task]="t"></app-task>
-		</div>
+			<div class="task-list">
+				<app-task *ngFor="let t of tasks(); let i = index" [task]="t" (taskChange)="onTaskChange(i, $event)"></app-task>
+			</div>
 	</section>
 </main>

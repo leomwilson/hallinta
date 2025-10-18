@@ -1,7 +1,39 @@
 <div class="task-container">
-  <h2 class="task-title">{{ task?.title || 'Untitled task' }}</h2>
-  <p class="task-description">{{ task?.description || 'No description' }}</p>
-  <p class="task-due-date">Due: {{ task?.dueDate || 'No due date' }}</p>
-  <p class="task-priority">Priority: {{ task?.priority || 'Normal' }}</p>
-  <p class="task-status">Status: {{ task?.status || 'Pending' }}</p>
+  <h2 class="task-title">
+    <span *ngIf="editingField !== 'title'" (click)="startEdit('title')">{{ task?.title || 'Untitled task' }}</span>
+  <input *ngIf="editingField === 'title'" [(ngModel)]="editModel['title']" />
+  </h2>
+
+  <p class="task-description">
+    <span *ngIf="editingField !== 'description'" (click)="startEdit('description')">{{ task?.description || 'No description' }}</span>
+  <textarea *ngIf="editingField === 'description'" [(ngModel)]="editModel['description']"></textarea>
+  </p>
+
+  <p class="task-due-date">
+    <span *ngIf="editingField !== 'dueDate'" (click)="startEdit('dueDate')">Due: {{ task?.dueDate || 'No due date' }}</span>
+  <input *ngIf="editingField === 'dueDate'" type="date" [(ngModel)]="editModel['dueDate']" />
+  </p>
+
+  <p class="task-priority">
+    <span *ngIf="editingField !== 'priority'" (click)="startEdit('priority')">Priority: {{ task?.priority || 'Normal' }}</span>
+  <select *ngIf="editingField === 'priority'" [(ngModel)]="editModel['priority']">
+      <option>Low</option>
+      <option>Normal</option>
+      <option>High</option>
+    </select>
+  </p>
+
+  <p class="task-status">
+    <span *ngIf="editingField !== 'status'" (click)="startEdit('status')">Status: {{ task?.status || 'Pending' }}</span>
+  <select *ngIf="editingField === 'status'" [(ngModel)]="editModel['status']">
+      <option>Pending</option>
+      <option>In Progress</option>
+      <option>Done</option>
+    </select>
+  </p>
+
+  <div *ngIf="editingField" class="task-edit-controls">
+    <button (click)="save()">Save</button>
+    <button (click)="cancel()">Cancel</button>
+  </div>
 </div>
