@@ -1,0 +1,17 @@
+<app-nav-bar></app-nav-bar>
+
+<main class="container">
+	<section class="tasks">
+		<h1>{{ title() }}</h1>
+		<p>Tasks: {{ tasks().length }}</p>
+		<button (click)="addSampleTask()">Add task</button>
+
+		<div *ngIf="tasks().length === 0">
+			<p>No tasks yet.</p>
+		</div>
+
+		<div class="task-list">
+			<app-task *ngFor="let t of tasks()" [task]="t"></app-task>
+		</div>
+	</section>
+</main>
