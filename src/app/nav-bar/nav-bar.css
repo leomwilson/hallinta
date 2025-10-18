@@ -21,3 +21,16 @@ nav {
   color: #F4F1DE;
   margin-left: 16px;
 }
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  float: left;
+}
+.nav-right {
+  float: right;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  margin-right: 25px;
+}

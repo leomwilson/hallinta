@@ -1,4 +1,9 @@
 <nav>
-  <span class="logo"><a href="/">Hallinta</a></span>
-  <span class="desc">A no-nonsense task dashboard</span>
+  <div class="nav-left">
+    <span class="logo"><a href="/">Hallinta</a></span>
+    <span class="desc">A no-nonsense task dashboard</span>
+  </div>
+  <div class="nav-right">
+    <button class="add-task" (click)="emitAdd()">Add Task</button>
+  </div>
 </nav>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,5 +9,10 @@ import { CommonModule } from '@angular/common';
   styleUrl: './nav-bar.css'
 })
 export class NavBar {
+  @Output() addTask = new EventEmitter<void>();
+
+  emitAdd() {
+    this.addTask.emit();
+  }
 
 }

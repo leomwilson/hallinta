@@ -1,9 +1,7 @@
-<app-nav-bar></app-nav-bar>
+<app-nav-bar (addTask)="addSampleTask()"></app-nav-bar>
 
 <main class="container">
 	<section class="tasks">
-		<p>Tasks: {{ tasks().length }}</p>
-		<button (click)="addSampleTask()">Add task</button>
 
 		<div *ngIf="tasks().length === 0">
 			<p>No tasks yet.</p>
