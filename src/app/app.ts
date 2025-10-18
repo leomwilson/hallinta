@@ -136,4 +136,9 @@ export class App {
     }
   }
 
+  onTaskDelete(createdAt: number | string) {
+    const list = this.tasks().filter((t) => (t.createdAt ?? 0) !== +createdAt);
+    this.tasks.set(list);
+  }
+
 }

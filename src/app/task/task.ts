@@ -19,6 +19,7 @@ export class Task {
     createdAt?: number;
   };
   @Output() taskChange = new EventEmitter<Partial<Record<string, string | number>>>();
+  @Output() taskDelete = new EventEmitter<number>();
 
   // which field is being edited, or null
   editingField: string | null = null;
@@ -60,6 +61,28 @@ export class Task {
   onInputKey(event: Event) {
     const ke = event as KeyboardEvent;
     if (ke.key === 'Enter') this.commitEdit();
+  }
+
+  isCompleted(): boolean {
+    const s = this.task?.status ?? '';
+    return s.toString().toLowerCase() === 'done' || s.toString().toLowerCase() === 'completed';
+  }
+
+  isOverdue(): boolean {
+    if (!this.task) return false;
+    if (this.isCompleted()) return false;
+    const d = this.task.dueDate;
+    if (!d) return false;
+    const due = Date.parse(d);
+    if (isNaN(due)) return false;
+    // compare to end of today (so tasks due today are not overdue)
+    const now = Date.now();
+    return due < now;
+  }
+
+  delete() {
+    if (!this.task) return;
+    if (this.task.createdAt !== undefined) this.taskDelete.emit(this.task.createdAt);
   }
 
 }

@@ -1,4 +1,5 @@
-<div class="task-container">
+<div class="task-container" [class.overdue]="isOverdue()" [class.completed]="isCompleted()">
+  <button class="task-delete" title="Delete task" (click)="delete()">✕</button>
   <h2 class="task-title">
     <span *ngIf="editingField !== 'title'" (click)="startEdit('title')">{{ task?.title || 'Untitled task' }}</span>
   <input *ngIf="editingField === 'title'" [(ngModel)]="editModel['title']" (blur)="commitEdit()" (keydown.enter)="onInputKey($event)" />

@@ -8,7 +8,7 @@
 		</div>
 
 			<div class="task-list">
-				<app-task *ngFor="let t of sortedTasks(); let i = index" [task]="t" (taskChange)="onTaskChangeByCreatedAt(t.createdAt ?? 0, $event)"></app-task>
+				<app-task *ngFor="let t of sortedTasks(); let i = index" [task]="t" (taskChange)="onTaskChangeByCreatedAt(t.createdAt ?? 0, $event)" (taskDelete)="onTaskDelete($event)"></app-task>
 			</div>
 	</section>
 </main>

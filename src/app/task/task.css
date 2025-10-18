@@ -21,6 +21,37 @@
   line-height: 1.3;
 }
 
+.task-delete {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  color: #a00;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.task-container {
+  position: relative;
+}
+
+/* overdue tasks */
+.task-container.overdue {
+  border-color: #E07A5F;
+  color: #E07A5F;
+}
+
+/* completed tasks */
+.task-container.completed {
+  border-color: #81B29A;
+  color: #81B29A;
+}
+
+.task-container.completed .task-delete {
+  color: rgba(0,0,0,0.45);
+}
+
 /* media queries for responsive columns */
 @media (min-width: 700px) {
   .task-container {
