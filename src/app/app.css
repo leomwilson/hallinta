@@ -1,0 +1,15 @@
+
+.task-list {
+	/* clear floats and provide some padding */
+	display: block;
+	overflow: auto; /* establish a new block formatting context to contain floats */
+	padding: 8px;
+	margin: 0 -8px;
+}
+
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 12px;
+}
+
