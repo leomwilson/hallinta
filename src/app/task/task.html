@@ -1,22 +1,22 @@
 <div class="task-container">
   <h2 class="task-title">
     <span *ngIf="editingField !== 'title'" (click)="startEdit('title')">{{ task?.title || 'Untitled task' }}</span>
-  <input *ngIf="editingField === 'title'" [(ngModel)]="editModel['title']" />
+  <input *ngIf="editingField === 'title'" [(ngModel)]="editModel['title']" (blur)="commitEdit()" (keydown.enter)="onInputKey($event)" />
   </h2>
 
   <p class="task-description">
     <span *ngIf="editingField !== 'description'" (click)="startEdit('description')">{{ task?.description || 'No description' }}</span>
-  <textarea *ngIf="editingField === 'description'" [(ngModel)]="editModel['description']"></textarea>
+  <textarea *ngIf="editingField === 'description'" [(ngModel)]="editModel['description']" (blur)="commitEdit()"></textarea>
   </p>
 
   <p class="task-due-date">
     <span *ngIf="editingField !== 'dueDate'" (click)="startEdit('dueDate')">Due: {{ task?.dueDate || 'No due date' }}</span>
-  <input *ngIf="editingField === 'dueDate'" type="date" [(ngModel)]="editModel['dueDate']" />
+  <input *ngIf="editingField === 'dueDate'" type="date" [(ngModel)]="editModel['dueDate']" (blur)="commitEdit()" />
   </p>
 
   <p class="task-priority">
     <span *ngIf="editingField !== 'priority'" (click)="startEdit('priority')">Priority: {{ task?.priority || 'Normal' }}</span>
-  <select *ngIf="editingField === 'priority'" [(ngModel)]="editModel['priority']">
+  <select *ngIf="editingField === 'priority'" [(ngModel)]="editModel['priority']" (blur)="commitEdit()">
       <option>Low</option>
       <option>Normal</option>
       <option>High</option>
@@ -25,15 +25,12 @@
 
   <p class="task-status">
     <span *ngIf="editingField !== 'status'" (click)="startEdit('status')">Status: {{ task?.status || 'Pending' }}</span>
-  <select *ngIf="editingField === 'status'" [(ngModel)]="editModel['status']">
+  <select *ngIf="editingField === 'status'" [(ngModel)]="editModel['status']" (blur)="commitEdit()">
       <option>Pending</option>
       <option>In Progress</option>
       <option>Done</option>
     </select>
   </p>
 
-  <div *ngIf="editingField" class="task-edit-controls">
-    <button (click)="save()">Save</button>
-    <button (click)="cancel()">Cancel</button>
-  </div>
+  <!-- autosave on blur; controls removed -->
 </div>

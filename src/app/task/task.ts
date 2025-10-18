@@ -16,8 +16,9 @@ export class Task {
     dueDate?: string;
     priority?: string;
     status?: string;
+    createdAt?: number;
   };
-  @Output() taskChange = new EventEmitter<Record<string, string>>();
+  @Output() taskChange = new EventEmitter<Partial<Record<string, string | number>>>();
 
   // which field is being edited, or null
   editingField: string | null = null;
@@ -37,15 +38,28 @@ export class Task {
     };
   }
 
-  save() {
-    if (!this.task) return;
-    const updated = { ...this.task, ...this.editModel } as Record<string, string>;
-    this.taskChange.emit(updated);
+  // commit current edit (on blur or Enter)
+  commitEdit() {
+    if (!this.task || !this.editingField) {
+      this.editingField = null;
+      return;
+    }
+
+    const key = this.editingField as keyof typeof this.editModel;
+    const value = this.editModel[key];
+
+    const payload: Partial<Record<string, string | number>> = {};
+    // include createdAt if present so parent can identify the task
+    if (this.task.createdAt !== undefined) payload['createdAt'] = this.task.createdAt;
+    if (value !== undefined) payload[key as string] = value as string | number;
+
+    this.taskChange.emit(payload);
     this.editingField = null;
   }
 
-  cancel() {
-    this.editingField = null;
+  onInputKey(event: Event) {
+    const ke = event as KeyboardEvent;
+    if (ke.key === 'Enter') this.commitEdit();
   }
 
 }
