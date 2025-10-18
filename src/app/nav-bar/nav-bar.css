@@ -32,5 +32,18 @@ nav {
   display: flex;
   align-items: center;
   height: 100%;
-  margin-right: 25px;
+  margin-right: 32px;
+}
+
+button {
+  border: 1px solid #E07A5F;
+  border-radius: 4px;
+  background-color: #3D405B;
+  color: #E07A5F;
+  font-size: 16px;
+}
+
+button:focus, button:hover {
+  background-color: #E07A5F;
+  color: #3D405B;
 }
