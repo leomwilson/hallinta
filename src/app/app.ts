@@ -35,41 +35,59 @@ export class App {
     // ensure createdAt is numeric
     const normalized: TaskItem[] = list.map((t: TaskItem) => ({ ...t, createdAt: typeof t.createdAt === 'number' ? t.createdAt : 0 }));
 
-    // helper to parse due date (ms) or NaN
     const parseDue = (t: TaskItem) => (t.dueDate ? Date.parse(t.dueDate) : NaN);
+    const isCompleted = (t: TaskItem) => {
+      const s = t.status ?? '';
+      return s.toString().toLowerCase() === 'done' || s.toString().toLowerCase() === 'completed';
+    };
 
-    // separate
-    const withDate: { task: TaskItem; dueMs: number }[] = [];
-    const withoutDate: TaskItem[] = [];
-
-    normalized.forEach((t: TaskItem) => {
-      const dueMs = parseDue(t);
-      if (!isNaN(dueMs)) withDate.push({ task: t, dueMs });
-      else withoutDate.push(t);
+    // partition into incomplete vs completed
+    const incomplete: TaskItem[] = [];
+    const completed: TaskItem[] = [];
+    normalized.forEach((t) => {
+      if (isCompleted(t)) completed.push(t);
+      else incomplete.push(t);
     });
 
-    // sort withDate ascending
-    withDate.sort((a, b) => a.dueMs - b.dueMs);
+    // helper: split dated vs no-date
+    const dated = (arr: TaskItem[]) => {
+      const withDate: { task: TaskItem; dueMs: number }[] = [];
+      const withoutDate: TaskItem[] = [];
+      arr.forEach((t) => {
+        const dueMs = parseDue(t);
+        if (!isNaN(dueMs)) withDate.push({ task: t, dueMs });
+        else withoutDate.push(t);
+      });
+      return { withDate, withoutDate };
+    };
 
     const out: TaskItem[] = [];
-    out.push(...withDate.map((x) => x.task));
 
-  // find most recent createdAt among normalized
-  const mostRecent = normalized.reduce((best: TaskItem | null, cur: TaskItem) => (cur.createdAt! > (best?.createdAt ?? 0) ? cur : best), normalized[0] || null);
+    // process incomplete first
+    const incSplit = dated(incomplete);
+    incSplit.withDate.sort((a, b) => a.dueMs - b.dueMs);
+    out.push(...incSplit.withDate.map((x) => x.task));
 
-    if (mostRecent) {
-      const mostRecentHasDate = !isNaN(parseDue(mostRecent));
-      if (!mostRecentHasDate) {
-        // put the most recent no-date task first among no-date tasks
-        const idx = withoutDate.findIndex((t) => t.createdAt === mostRecent.createdAt);
-        if (idx >= 0) {
-          out.push(withoutDate[idx]);
-          withoutDate.splice(idx, 1);
-        }
+    // find most recent no-date among incomplete
+    if (incSplit.withoutDate.length > 0) {
+      let mostRecentIdx = 0;
+      for (let i = 1; i < incSplit.withoutDate.length; i++) {
+        if ((incSplit.withoutDate[i].createdAt ?? 0) > (incSplit.withoutDate[mostRecentIdx].createdAt ?? 0)) mostRecentIdx = i;
+      }
+      out.push(incSplit.withoutDate[mostRecentIdx]);
+      for (let i = 0; i < incSplit.withoutDate.length; i++) {
+        if (i === mostRecentIdx) continue;
+        out.push(incSplit.withoutDate[i]);
       }
     }
 
-    out.push(...withoutDate);
+    // now append completed tasks (they come after incomplete)
+    const compSplit = dated(completed);
+    compSplit.withDate.sort((a, b) => a.dueMs - b.dueMs);
+    out.push(...compSplit.withDate.map((x) => x.task));
+
+    // append remaining no-date completed tasks
+    out.push(...compSplit.withoutDate);
 
     return out;
   });
